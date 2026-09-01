@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: theme("colors.bg");
+  color: theme("colors.ink");
+  font-family: "Barlow", "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+[dir="rtl"] body {
+  font-family: "IBM Plex Sans Arabic", "Barlow", system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Barlow Condensed", "Noto Kufi Arabic", system-ui, sans-serif;
+  font-weight: 600;
+}
+
+/* Industry design system — blueprint frame: square, hairline-bordered,
+   with "+" registration marks at the corners. Ported from
+   project/_ds/industry-.../styles.css (.blueprint / .corner). */
+.blueprint {
+  position: relative;
+  border: 1px solid theme("colors.divider");
+}
+.corner {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  color: rgba(29, 31, 32, 0.55);
+}
+.corner::before,
+.corner::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.corner::before { left: 5px; top: 0; width: 1px; height: 100%; }
+.corner::after { top: 5px; left: 0; width: 100%; height: 1px; }
+.corner.tl { top: -6px; left: -6px; }
+.corner.tr { top: -6px; right: -6px; }
+.corner.bl { bottom: -6px; left: -6px; }
+.corner.br { bottom: -6px; right: -6px; }
+
+.mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.lbl {
+  font-family: "Barlow Condensed", "Noto Kufi Arabic", sans-serif;
+  font-weight: 600;
+  font-size: 10.5px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(29, 31, 32, 0.55);
+}
+
+[data-lang="ar"] .en { display: none; }
+[data-lang="en"] .ar { display: none; }
+
+::selection {
+  background: rgba(89, 128, 166, 0.3);
+}
+:focus-visible {
+  outline: 2px solid theme("colors.accent.DEFAULT");
+  outline-offset: 2px;
+}

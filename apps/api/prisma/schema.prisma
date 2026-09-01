@@ -1,0 +1,350 @@
+// Tanafus — primary database schema.
+// PostgreSQL + PostGIS (per the architecture diagram): port and live-vehicle
+// positions are geography points so tender matching can geo-fence by port
+// and jobs can be tracked on a real map once Mapbox/Google Maps replaces the
+// prototype's drawn placeholder.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Production should provision PostGIS on this database (matches the
+// architecture diagram's "PostgreSQL + PostGIS"). Prisma has no native
+// spatial column type, so port/vehicle coordinates are stored as plain
+// lat/lng floats here; a later pass can add a raw-SQL migration for a
+// geography(Point,4326) column + GiST index once real geo-fence queries
+// (nearest port, live GPS radius) are needed. Not required for local dev.
+
+// ── Identity ──────────────────────────────────────────────────────
+
+enum Role {
+  CLIENT
+  BROKER
+  CARRIER
+  DRIVER
+  ADMIN
+}
+
+enum ProviderType {
+  BROKER
+  CARRIER
+  DRIVER
+}
+
+enum KycStatus {
+  PENDING
+  MISSING_DOCS
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String        @id @default(cuid())
+  role          Role
+  mobile        String        @unique
+  nameAr        String
+  nameEn        String
+  passwordHash  String?
+  companyId     String?
+  company       Company?      @relation(fields: [companyId], references: [id])
+  providerType  ProviderType?
+  kycStatus     KycStatus     @default(PENDING)
+  ratingAvg     Float         @default(0)
+  ratingCount   Int           @default(0)
+  createdAt     DateTime      @default(now())
+
+  kycApplications KycApplication[]
+  tenders         Tender[]         @relation("ClientTenders")
+  bids            Bid[]
+  ordersAsClient  Order[]          @relation("ClientOrders")
+  ordersAsProvider Order[]         @relation("ProviderOrders")
+  walletTxns      WalletTransaction[]
+  withdrawals     WithdrawalRequest[]
+  subAccounts     SubAccount[]     @relation("CompanyOwner")
+
+  @@map("users")
+}
+
+model Company {
+  id               String   @id @default(cuid())
+  tradeNameAr      String
+  tradeNameEn      String
+  commercialReg    String   @unique
+  vatNumber        String
+  signatoryName    String
+  signatoryMobile  String
+  payoutIban       String?
+  createdAt        DateTime @default(now())
+
+  users        User[]
+  subAccounts  SubAccount[]
+
+  @@map("companies")
+}
+
+model SubAccount {
+  id         String   @id @default(cuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id])
+  ownerId    String
+  owner      User     @relation("CompanyOwner", fields: [ownerId], references: [id])
+  nameAr     String
+  nameEn     String
+  role       String // OPERATIONS · CAN BID / FINANCE · CAN PAY / VIEWER · READ ONLY
+  active     Boolean  @default(true)
+
+  @@map("sub_accounts")
+}
+
+// ── Ports (geo-fenced marketplace) ──────────────────────────────────
+
+model Port {
+  code      String  @id
+  nameAr    String
+  nameEn    String
+  brokers   Int     @default(0)
+  // geography(Point, 4326) — Prisma has no native PostGIS type, so the
+  // column is added via a raw migration; lat/lng are kept here for the app
+  // layer and easy seeding.
+  lat       Float
+  lng       Float
+
+  kycRequests KycApplication[] @relation("RequestedPorts")
+  tenders     Tender[]
+  orders      Order[]
+
+  @@map("ports")
+}
+
+// ── KYC / onboarding ─────────────────────────────────────────────────
+
+model KycApplication {
+  id             String       @id @default(cuid())
+  applicantId    String
+  applicant      User         @relation(fields: [applicantId], references: [id])
+  providerType   ProviderType
+  status         KycStatus    @default(IN_REVIEW)
+  reviewerNote   String?
+  requestedPorts Port[]       @relation("RequestedPorts")
+  documents      KycDocument[]
+  submittedAt    DateTime     @default(now())
+  decidedAt      DateTime?
+
+  @@map("kyc_applications")
+}
+
+model KycDocument {
+  id            String         @id @default(cuid())
+  applicationId String
+  application   KycApplication @relation(fields: [applicationId], references: [id])
+  key           String // d1..d4, matches KYC_DOCS in the prototype
+  labelAr       String
+  labelEn       String
+  uploaded      Boolean        @default(false)
+  fileUrl       String?
+  uploadedAt    DateTime?
+
+  @@map("kyc_documents")
+}
+
+// ── Tender marketplace (reverse auction) ─────────────────────────────
+
+enum ServiceType {
+  CLEARANCE
+  INSPECTION
+  GOV
+  FREIGHT
+}
+
+enum TenderStatus {
+  OPEN
+  AWARDED
+  EXPIRED
+  CANCELLED
+}
+
+model Tender {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  clientId        String
+  client          User         @relation("ClientTenders", fields: [clientId], references: [id])
+  service         ServiceType
+  portCode        String
+  port            Port         @relation(fields: [portCode], references: [code])
+  titleAr         String
+  titleEn         String
+  descAr          String
+  descEn          String
+  billOfLading    String?
+  invoiceNo       String?
+  grossWeightKg   Float?
+  pieceCount      Int?
+  declaredValueOmr Float?
+  taxExempt       Boolean      @default(false)
+  deliveryLocation String?
+  truckType        String?
+  clientNotes     String?
+  closesAt        DateTime
+  status          TenderStatus @default(OPEN)
+  createdAt       DateTime     @default(now())
+
+  bids    Bid[]
+  order   Order?
+  documents TenderDocument[]
+
+  @@map("tenders")
+}
+
+model TenderDocument {
+  id       String @id @default(cuid())
+  tenderId String
+  tender   Tender @relation(fields: [tenderId], references: [id])
+  nameAr   String
+  nameEn   String
+  meta     String
+  url      String?
+
+  @@map("tender_documents")
+}
+
+enum BidStatus {
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+model Bid {
+  id           String    @id @default(cuid())
+  tenderId     String
+  tender       Tender    @relation(fields: [tenderId], references: [id])
+  providerId   String
+  provider     User      @relation(fields: [providerId], references: [id])
+  priceOmr     Float
+  etaHours     Int
+  status       BidStatus @default(SUBMITTED)
+  createdAt    DateTime  @default(now())
+
+  @@map("bids")
+}
+
+// ── Orders / clearance & freight execution ────────────────────────────
+
+enum OrderStage {
+  ASSIGNED
+  DECLARATION
+  INSPECTION
+  RELEASED
+  IN_TRANSIT
+  DELIVERED
+}
+
+model Order {
+  id            String     @id @default(cuid())
+  code          String     @unique
+  tenderId      String     @unique
+  tender        Tender     @relation(fields: [tenderId], references: [id])
+  clientId      String
+  client        User       @relation("ClientOrders", fields: [clientId], references: [id])
+  providerId    String
+  provider      User       @relation("ProviderOrders", fields: [providerId], references: [id])
+  service       ServiceType
+  portCode      String
+  port          Port       @relation(fields: [portCode], references: [code])
+  stage         OrderStage @default(ASSIGNED)
+  escrowOmr     Float
+  deliveryOtp   String
+  deliveredAt   DateTime?
+  rating        Int?
+  ratingTraits  String[]   @default([])
+  createdAt     DateTime   @default(now())
+
+  escrowEntries EscrowLedgerEntry[]
+  dispute       Dispute?
+
+  @@map("orders")
+}
+
+// ── Escrow & wallet ────────────────────────────────────────────────
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  REFUNDED
+  SPLIT
+}
+
+model EscrowLedgerEntry {
+  id             String       @id @default(cuid())
+  orderId        String
+  order          Order        @relation(fields: [orderId], references: [id])
+  amountOmr      Float
+  commissionPct  Float
+  commissionOmr  Float
+  netOmr         Float
+  status         EscrowStatus @default(HELD)
+  createdAt      DateTime     @default(now())
+
+  @@map("escrow_ledger")
+}
+
+model WalletTransaction {
+  id            String   @id @default(cuid())
+  providerId    String
+  provider      User     @relation(fields: [providerId], references: [id])
+  orderId       String?
+  withdrawalId  String?
+  labelAr       String
+  labelEn       String
+  meta          String
+  amountOmr     Float
+  pending       Boolean
+  status        String // IN ESCROW / RELEASED / PAID OUT
+  createdAt     DateTime @default(now())
+
+  @@map("wallet_transactions")
+}
+
+model WithdrawalRequest {
+  id          String   @id @default(cuid())
+  providerId  String
+  provider    User     @relation(fields: [providerId], references: [id])
+  amountOmr   Float
+  bankName    String
+  accountHolder String
+  iban        String
+  currency    String   @default("OMR")
+  status      String   @default("requested") // requested / paid / held
+  createdAt   DateTime @default(now())
+
+  @@map("withdrawal_requests")
+}
+
+// ── Disputes ─────────────────────────────────────────────────────────
+
+model Dispute {
+  id                  String   @id @default(cuid())
+  code                String   @unique
+  orderId             String   @unique
+  order               Order    @relation(fields: [orderId], references: [id])
+  subjectAr           String
+  subjectEn           String
+  meta                String
+  priority            String // LOW / MEDIUM / HIGH
+  frozenOmr           Float
+  clientClaimAr       String
+  clientClaimEn       String
+  providerResponseAr  String
+  providerResponseEn  String
+  status              String   @default("open") // open / released_provider / refunded_client / split
+  openedAt            DateTime @default(now())
+  resolvedAt          DateTime?
+
+  @@map("disputes")
+}

@@ -1,3 +1,31 @@
+# Tanafus · تنافُس
+
+Customs clearance & freight tender marketplace for the Sultanate of Oman —
+implemented from the Claude Design handoff bundle in `project/`.
+
+- **`apps/api`** — Fastify + Prisma backend (auth/OTP, tenders, bids, escrow,
+  KYC, wallet, disputes, admin endpoints). See `apps/api/README.md` to run it.
+- **`apps/admin`** — Next.js web admin console (overview, KYC queue,
+  operations monitor, financial centre, disputes).
+- **`apps/mobile`** — Expo React Native app: the client app (post shipments,
+  compare bids, escrow checkout, live tracking) and the partner app
+  (onboarding/KYC, tender feed, active jobs, wallet), AR/EN with full RTL.
+- **`packages/theme`, `packages/i18n`, `packages/types`** — shared design
+  tokens, bilingual copy, and domain DTOs used by all three apps.
+
+Start here:
+
+- `docs/ARCHITECTURE.md` — system diagram and why these technology choices.
+- `docs/IMPLEMENTATION_STATUS.md` — what's fully wired vs. deliberately
+  simplified (maps, payments, SMS gateway, PostGIS, admin auth).
+- `apps/api/README.md` — how to run Postgres, Redis, migrate, seed, and
+  start the API locally.
+
+## Original design handoff
+
+<details>
+<summary>The bundle's original README (Claude Design → coding agent handoff notes)</summary>
+
 # CODING AGENTS: READ THIS FIRST
 
 This is a **handoff bundle** from Claude Design (claude.ai/design).
@@ -23,3 +51,5 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 - `README.md` — this file
 - `chats/` — conversation transcripts (read these!)
 - `project/` — the `Logistics clearance and freight app design` project files (HTML prototypes, assets, components)
+
+</details>
