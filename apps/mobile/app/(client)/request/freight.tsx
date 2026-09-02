@@ -2,7 +2,6 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "../../../src/ui/Screen";
 import { T } from "../../../src/ui/T";
-import { Input } from "../../../src/ui/Input";
 import { Btn } from "../../../src/ui/Btn";
 import { BottomBar } from "../../../src/ui/BottomBar";
 import { PickCard } from "../../../src/ui/PickCard";
@@ -10,11 +9,12 @@ import { Lbl } from "../../../src/ui/Text";
 import { Blueprint } from "../../../src/ui/Blueprint";
 import { c } from "../../../src/ui/tokens";
 import { useTenderDraft } from "../../../src/state/tenderDraft";
-import { trucks } from "@tanafus/i18n";
+import { trucks, deliveryHubs } from "@tanafus/i18n";
 
-/** 1a (part 3, freight only) — delivery location + truck type. The map is a
- * drawn placeholder in the design bundle too, marked for a Mapbox/Google
- * Maps SDK swap. */
+/** 1a (part 3, freight only) — delivery location + truck type. The map
+ * canvas is still a drawn placeholder (per the design bundle's own note),
+ * but the hub picker gives it real coordinates — live tracking later shows
+ * a real PostGIS/Redis-GEO distance instead of a made-up number. */
 export default function RequestFreight() {
   const draft = useTenderDraft();
 
@@ -36,7 +36,18 @@ export default function RequestFreight() {
         <Blueprint style={{ height: 140, alignItems: "center", justifyContent: "center", backgroundColor: c.neutral100 }}>
           <T ar="⚑ خريطة ملاحة — عنصر بديل" en="⚑ Navigation map — placeholder" style={{ fontSize: 11.5, color: c.textMuted55 }} />
         </Blueprint>
-        <Input labelAr="العنوان" labelEn="Address" value={draft.deliveryLocation} onChangeText={(v) => draft.set({ deliveryLocation: v })} />
+        <View style={{ gap: 8 }}>
+          {deliveryHubs.map((h) => (
+            <PickCard
+              key={h.key}
+              code={h.key.slice(0, 3).toUpperCase()}
+              ar={h.ar}
+              en={h.en}
+              on={draft.deliveryHub === h.key}
+              onPress={() => draft.set({ deliveryHub: h.key })}
+            />
+          ))}
+        </View>
       </View>
 
       <View style={{ gap: 10 }}>

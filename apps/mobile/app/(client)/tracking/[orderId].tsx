@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Screen } from "../../../src/ui/Screen";
@@ -12,21 +12,39 @@ import { useDir } from "../../../src/state/locale";
 import { useSession } from "../../../src/state/session";
 import { useApi } from "../../../src/lib/useApi";
 import { apiFetch } from "../../../src/lib/api";
-import { clearanceSteps } from "@tanafus/i18n";
+import { clearanceSteps, freightSteps } from "@tanafus/i18n";
 import type { Order } from "@tanafus/types";
 
-const STAGE_INDEX: Record<string, number> = { assigned: 0, declaration: 1, inspection: 2, released: 3, in_transit: 3, delivered: 4 };
+interface LocationResponse {
+  tracking: boolean;
+  lat?: number;
+  lng?: number;
+  distanceKm?: number | null;
+}
 
-/** 1d — live order tracking: the four-stage clearance stepper, plus a
- * drawn-placeholder navigation map for freight orders. "Simulate next
+/** 1d — live order tracking: the clearance stepper for customs orders, a
+ * freight-specific line + live distance for road freight. "Simulate next
  * stage" mirrors the prototype's own demo control (`advance()`), wired here
- * to the real POST /orders/:id/advance instead of local-only state. */
+ * to the real POST /orders/:id/advance instead of local-only state. Freight
+ * distance comes from the real Redis GEO buffer the carrier's job screen
+ * posts to (POST /orders/:id/location) — not a placeholder number. */
 export default function Tracking() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const { row } = useDir();
   const token = useSession((s) => s.token);
   const { data: order, loading, reload } = useApi<Order>(`/orders/${orderId}`);
   const [advancing, setAdvancing] = useState(false);
+  const [location, setLocation] = useState<LocationResponse | null>(null);
+
+  const isFreight = order?.service === "freight";
+
+  useEffect(() => {
+    if (!isFreight || order?.stage !== "in_transit") return;
+    const poll = () => apiFetch<LocationResponse>(`/orders/${orderId}/location`, token).then(setLocation).catch(() => {});
+    poll();
+    const t = setInterval(poll, 5000);
+    return () => clearInterval(t);
+  }, [isFreight, order?.stage, orderId, token]);
 
   async function advance() {
     setAdvancing(true);
@@ -46,25 +64,35 @@ export default function Tracking() {
     );
   }
 
-  const stepIdx = STAGE_INDEX[order.stage] ?? 0;
-  const isFreight = order.service === "freight";
+  const steps = isFreight ? freightSteps : clearanceSteps;
+  const stepIdx = Math.min(order.stageIndex, steps.length - 1);
 
   return (
     <Screen titleAr="تتبّع المعاملة" titleEn="Live tracking" subtitle={`${order.code} · ${order.portCode}`}>
       {isFreight && order.stage === "in_transit" && (
-        <Blueprint style={{ height: 150, alignItems: "center", justifyContent: "center", backgroundColor: c.neutral100 }}>
+        <Blueprint style={{ height: 150, alignItems: "center", justifyContent: "center", backgroundColor: c.neutral100, gap: 6 }}>
           <T ar="⚑ خريطة الملاحة الحية — عنصر بديل" en="⚑ Live navigation map — placeholder" style={{ fontSize: 11.5, color: c.textMuted55 }} />
+          {location?.tracking && location.distanceKm != null && (
+            <T
+              ar={`${location.distanceKm} كم متبقٍ`}
+              en={`${location.distanceKm} km remaining`}
+              style={{ fontSize: 13, fontWeight: "600", color: c.accent700, fontFamily: font.mono }}
+            />
+          )}
+          {!location?.tracking && (
+            <T ar="بانتظار موقع الناقل" en="Waiting for the carrier's location" style={{ fontSize: 10.5, color: c.textMuted48 }} />
+          )}
         </Blueprint>
       )}
 
       <Blueprint style={{ padding: 0 }}>
-        {clearanceSteps.map((s, i) => {
+        {steps.map((s, i) => {
           const done = i < stepIdx;
           const cur = i === stepIdx;
           return (
             <View
               key={s.key}
-              style={{ flexDirection: row, alignItems: "center", gap: 11, paddingVertical: 13, paddingHorizontal: 14, borderBottomWidth: i < clearanceSteps.length - 1 ? 1 : 0, borderBottomColor: c.divider }}
+              style={{ flexDirection: row, alignItems: "center", gap: 11, paddingVertical: 13, paddingHorizontal: 14, borderBottomWidth: i < steps.length - 1 ? 1 : 0, borderBottomColor: c.divider }}
             >
               <View
                 style={{

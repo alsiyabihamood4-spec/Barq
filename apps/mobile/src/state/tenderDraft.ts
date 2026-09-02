@@ -13,7 +13,7 @@ interface TenderDraftState {
   declaredValueOmr: string;
   taxExempt: boolean;
   truckType: string;
-  deliveryLocation: string;
+  deliveryHub: string;
   durationMinutes: number;
   set: (patch: Partial<Omit<TenderDraftState, "set" | "reset">>) => void;
   reset: () => void;
@@ -28,7 +28,7 @@ const initial = {
   declaredValueOmr: "31200",
   taxExempt: true,
   truckType: "flatbed",
-  deliveryLocation: "Rusayl Industrial Estate",
+  deliveryHub: "rusayl",
   durationMinutes: 120,
 };
 

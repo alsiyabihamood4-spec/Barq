@@ -9,6 +9,7 @@ import { c, font } from "../../src/ui/tokens";
 import { useDir } from "../../src/state/locale";
 import { useSession } from "../../src/state/session";
 import { useApi } from "../../src/lib/useApi";
+import { WS_URL } from "../../src/lib/api";
 import { Lbl } from "../../src/ui/Text";
 import type { Tender, Order } from "@tanafus/types";
 
@@ -26,15 +27,38 @@ function hms(seconds: number) {
 export default function Feed() {
   const { row, textAlign } = useDir();
   const user = useSession((s) => s.user);
-  const { data: tenders, loading } = useApi<Tender[]>("/tenders");
+  const { data: tenders, loading, reload } = useApi<Tender[]>("/tenders");
   const { data: orders } = useApi<Order[]>("/orders");
   const activeJobs = (orders ?? []).filter((o) => o.stage !== "delivered");
   const [now, setNow] = useState(Date.now());
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
+
+  // Live feed: a new tender or a bid landing on one refreshes the list
+  // instead of waiting for the next manual pull — apps/api's /ws/tenders
+  // fans out the same Redis pub/sub events routes/tenders.ts and
+  // routes/bids.ts already publish on write.
+  useEffect(() => {
+    let ws: WebSocket | undefined;
+    let cancelled = false;
+    try {
+      ws = new WebSocket(`${WS_URL}/ws/tenders`);
+      ws.onopen = () => !cancelled && setLive(true);
+      ws.onclose = () => !cancelled && setLive(false);
+      ws.onerror = () => !cancelled && setLive(false);
+      ws.onmessage = () => reload();
+    } catch {
+      setLive(false);
+    }
+    return () => {
+      cancelled = true;
+      ws?.close();
+    };
+  }, [reload]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }} edges={["top", "bottom"]}>
@@ -66,9 +90,17 @@ export default function Feed() {
           </View>
         )}
 
-        <Lbl>
-          <T ar="ساحة المناقصات" en="Open tenders" />
-        </Lbl>
+        <View style={{ flexDirection: row, alignItems: "center", gap: 6 }}>
+          <Lbl>
+            <T ar="ساحة المناقصات" en="Open tenders" />
+          </Lbl>
+          {live && (
+            <View style={{ flexDirection: row, alignItems: "center", gap: 4 }}>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.accent }} />
+              <Mono style={{ fontSize: 8.5, color: c.accent700, letterSpacing: 1 }}>LIVE</Mono>
+            </View>
+          )}
+        </View>
         {loading && <ActivityIndicator color={c.accent} />}
         {!loading && (tenders ?? []).length === 0 && (
           <Blueprint style={{ padding: 24, alignItems: "center" }}>

@@ -7,7 +7,7 @@ export class ApiError extends Error {
 }
 
 /** Thin fetch wrapper shared by every admin page — attaches the admin JWT
- * (set by app/api/dev-login) and throws on non-2xx so pages can catch and
+ * (set by app/api/auth/verify-otp on sign-in) and throws on non-2xx so pages can catch and
  * show a friendly "API not reachable" state instead of a blank screen. */
 export async function apiFetch<T>(path: string, token: string | undefined, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {

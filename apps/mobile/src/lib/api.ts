@@ -1,6 +1,9 @@
 import Constants from "expo-constants";
 
 export const API_URL: string = (Constants.expoConfig?.extra?.apiUrl as string) ?? "http://localhost:4000";
+/** Live tender feed (2b) — apps/api's /ws/tenders fans out `tenders:new` /
+ * `tenders:bid` Redis pub/sub events over this. */
+export const WS_URL: string = API_URL.replace(/^http/, "ws");
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {

@@ -13,7 +13,7 @@ import { useDir } from "../../../src/state/locale";
 import { useTenderDraft } from "../../../src/state/tenderDraft";
 import { useSession } from "../../../src/state/session";
 import { apiFetch } from "../../../src/lib/api";
-import { services, ports } from "@tanafus/i18n";
+import { services, ports, deliveryHubs } from "@tanafus/i18n";
 import type { Tender } from "@tanafus/types";
 
 const DURATIONS = [
@@ -32,6 +32,7 @@ export default function RequestDuration() {
   const [loading, setLoading] = useState(false);
   const service = services.find((s) => s.key === draft.service)!;
   const port = ports.find((p) => p.code === draft.portCode)!;
+  const hub = deliveryHubs.find((h) => h.key === draft.deliveryHub)!;
 
   async function publish() {
     setLoading(true);
@@ -52,7 +53,9 @@ export default function RequestDuration() {
             grossWeightKg: Number(draft.grossWeightKg) || 0,
             declaredValueOmr: Number(draft.declaredValueOmr) || 0,
             taxExempt: draft.taxExempt,
-            deliveryLocation: draft.service === "freight" ? draft.deliveryLocation : undefined,
+            deliveryLocation: draft.service === "freight" ? hub.en : undefined,
+            deliveryLat: draft.service === "freight" ? hub.lat : undefined,
+            deliveryLng: draft.service === "freight" ? hub.lng : undefined,
             truckType: draft.service === "freight" ? draft.truckType : undefined,
           },
         }),
@@ -94,6 +97,7 @@ export default function RequestDuration() {
         <Row ar="المنفذ" en="Port" v={port.code} />
         <Row ar="البوليصة" en="Bill of lading" v={draft.billOfLading} />
         <Row ar="القيمة" en="Value" v={`${draft.declaredValueOmr} OMR`} />
+        {draft.service === "freight" && <Row ar="التسليم" en="Delivery" v={hub.en} />}
       </Blueprint>
     </Screen>
   );

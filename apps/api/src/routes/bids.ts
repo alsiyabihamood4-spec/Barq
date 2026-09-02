@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { generateOrderCode, generateDeliveryOtp } from "../lib/codes.js";
 import { splitCommission } from "../lib/commission.js";
+import { toOrderDto } from "../lib/dto.js";
 import { env } from "../env.js";
 
 const submitBidSchema = z.object({ priceOmr: z.number().positive(), etaHours: z.number().positive() });
@@ -18,6 +19,8 @@ export default async function bidRoutes(app: FastifyInstance) {
     const bid = await app.prisma.bid.create({
       data: { tenderId: id, providerId: req.user.sub, priceOmr: body.priceOmr, etaHours: Math.round(body.etaHours) },
     });
+    const bidCount = await app.prisma.bid.count({ where: { tenderId: id } });
+    await app.redis.publish("tenders:bid", JSON.stringify({ tenderId: id, bidCount })).catch(() => {});
     return reply.code(201).send(bid);
   });
 
@@ -56,6 +59,6 @@ export default async function bidRoutes(app: FastifyInstance) {
       data: { orderId: order.id, ...splitCommission(bid.priceOmr, env.commissionPct), status: "HELD" },
     });
 
-    return reply.send(order);
+    return reply.send(toOrderDto(order));
   });
 }

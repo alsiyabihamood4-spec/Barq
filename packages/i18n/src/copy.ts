@@ -50,6 +50,16 @@ export const services = [
   { key: "freight", code: "SVC-04", ar: "نقل بري", en: "Road freight" },
 ] as const;
 
+/** Known delivery hubs for the freight request flow — real coordinates so
+ * the live-tracking distance (PostGIS/Redis GEO-backed) is meaningful
+ * instead of a placeholder number. */
+export const deliveryHubs = [
+  { key: "rusayl", ar: "الرسيل الصناعية", en: "Rusayl Industrial Estate", lat: 23.6493, lng: 58.1364 },
+  { key: "barka", ar: "بركاء", en: "Barka", lat: 23.6667, lng: 57.8833 },
+  { key: "thumrait", ar: "ثمريت", en: "Thumrait", lat: 17.6333, lng: 54.0333 },
+  { key: "soharfz", ar: "المنطقة الحرة صحار", en: "Sohar Free Zone", lat: 24.4667, lng: 56.6167 },
+] as const;
+
 export const trucks = [
   { key: "flatbed", code: "TR-01", ar: "مسطحة 40 قدم", en: "40 ft flatbed", cap: "≤ 24 t" },
   { key: "box", code: "TR-02", ar: "صندوق مغلق", en: "Closed box", cap: "≤ 12 t" },
@@ -62,6 +72,14 @@ export const clearanceSteps = [
   { key: "s2", ar: "إعداد البيان الجمركي", en: "Bayan declaration", noteAr: "إدخال البنود والتعريفة في نظام بيان", noteEn: "HS lines and tariff filed in Bayan" },
   { key: "s3", ar: "انتظار التفتيش", en: "Awaiting inspection", noteAr: "المسار الأحمر — فحص بالأشعة في الساحة 4", noteEn: "Red channel — scanner yard 4" },
   { key: "s4", ar: "تم الفسح", en: "Released", noteAr: "إشعار الفسح صادر وجاهز للتحميل", noteEn: "Release note issued, ready to load" },
+] as const;
+
+/** Freight's own step line — no customs stages, matches the FREIGHT entry
+ * in apps/api's STAGE_SEQUENCE (assigned → in_transit → delivered). */
+export const freightSteps = [
+  { key: "f1", ar: "تم تعيين الناقل", en: "Carrier assigned", noteAr: "قبول العرض وحجز مبلغ الضمان", noteEn: "Bid accepted, escrow funded" },
+  { key: "f2", ar: "في الطريق", en: "In transit", noteAr: "الشاحنة في طريقها إلى موقع التسليم", noteEn: "Truck en route to the delivery location" },
+  { key: "f3", ar: "تم التسليم", en: "Delivered", noteAr: "تم تأكيد الاستلام برمز التسليم", noteEn: "Delivery confirmed by OTP" },
 ] as const;
 
 export const deliveryChecks = [

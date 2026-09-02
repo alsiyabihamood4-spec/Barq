@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Screen } from "../../../src/ui/Screen";
@@ -14,7 +14,17 @@ import { useSession } from "../../../src/state/session";
 import { useApi } from "../../../src/lib/useApi";
 import { apiFetch } from "../../../src/lib/api";
 import { clearanceSteps } from "@tanafus/i18n";
-import type { Order } from "@tanafus/types";
+import type { Order, Port } from "@tanafus/types";
+
+interface TenderCoords {
+  portCode: string;
+  deliveryLat?: number | null;
+  deliveryLng?: number | null;
+}
+interface LocationResponse {
+  tracking: boolean;
+  distanceKm?: number | null;
+}
 
 /** 2c — active job execution. Clearance orders get the broker's quick
  * stage-update buttons; freight orders get the carrier's start-trip +
@@ -29,6 +39,45 @@ export default function Job() {
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState(false);
   const [delivering, setDelivering] = useState(false);
+  const [origin, setOrigin] = useState<{ lat: number; lng: number } | null>(null);
+  const [dest, setDest] = useState<{ lat: number; lng: number } | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [pinging, setPinging] = useState(false);
+  const [distanceKm, setDistanceKm] = useState<number | null>(null);
+
+  // Real coordinates for the GPS simulation: the tender's origin port and
+  // its delivery hub (set by the client's freight request flow).
+  useEffect(() => {
+    if (!order || order.service !== "freight") return;
+    apiFetch<TenderCoords>(`/tenders/${order.tenderId}`, token)
+      .then((tender) => {
+        if (tender.deliveryLat != null && tender.deliveryLng != null) {
+          setDest({ lat: tender.deliveryLat, lng: tender.deliveryLng });
+        }
+        return apiFetch<Port[]>("/ports", token);
+      })
+      .then((ports) => {
+        const port = ports?.find((p) => p.code === order.portCode);
+        if (port) setOrigin({ lat: port.lat, lng: port.lng });
+      })
+      .catch(() => {});
+  }, [order?.id, order?.service, order?.portCode, order?.tenderId, token]);
+
+  async function pingLocation() {
+    if (!origin || !dest) return;
+    setPinging(true);
+    try {
+      const next = Math.min(1, progress + 0.25);
+      const lat = origin.lat + (dest.lat - origin.lat) * next;
+      const lng = origin.lng + (dest.lng - origin.lng) * next;
+      await apiFetch(`/orders/${orderId}/location`, token, { method: "POST", body: JSON.stringify({ lat, lng }) });
+      setProgress(next);
+      const loc = await apiFetch<LocationResponse>(`/orders/${orderId}/location`, token);
+      setDistanceKm(loc.distanceKm ?? null);
+    } finally {
+      setPinging(false);
+    }
+  }
 
   async function advance() {
     setAdvancing(true);
@@ -86,8 +135,7 @@ export default function Job() {
             <T ar="تحديث حالة البيان" en="Update declaration status" />
           </Lbl>
           {clearanceSteps.map((s, i) => {
-            const stageIdx = { assigned: 0, declaration: 1, inspection: 2, released: 3, in_transit: 3, delivered: 4 }[order.stage] ?? 0;
-            const on = stageIdx === i;
+            const on = order.stageIndex === i;
             return (
               <View key={s.key} style={{ flexDirection: row, alignItems: "center", gap: 10, borderWidth: 1, borderColor: on ? c.accent : c.divider, backgroundColor: on ? c.accent100 : "transparent", padding: 13 }}>
                 <Mono style={{ fontSize: 9.5, color: on ? c.accent700 : c.textMuted45 }}>ST-0{i + 1}</Mono>
@@ -102,9 +150,22 @@ export default function Job() {
           {order.stage !== "in_transit" ? (
             <Btn ar="بدء الرحلة" en="Start trip" onPress={advance} loading={advancing} />
           ) : (
-            <Blueprint style={{ height: 140, alignItems: "center", justifyContent: "center", backgroundColor: c.neutral100 }}>
-              <T ar="⚑ مسار الملاحة إلى الوجهة" en="⚑ Navigation route to destination" style={{ fontSize: 11.5, color: c.textMuted55 }} />
-            </Blueprint>
+            <View style={{ gap: 10 }}>
+              <Blueprint style={{ height: 140, alignItems: "center", justifyContent: "center", backgroundColor: c.neutral100, gap: 6 }}>
+                <T ar="⚑ مسار الملاحة إلى الوجهة" en="⚑ Navigation route to destination" style={{ fontSize: 11.5, color: c.textMuted55 }} />
+                {distanceKm != null && (
+                  <Mono style={{ fontSize: 13, fontWeight: "600", color: c.accent700 }}>{distanceKm} km</Mono>
+                )}
+              </Blueprint>
+              <Btn
+                variant="secondary"
+                ar="تحديث الموقع (محاكاة GPS)"
+                en="Update location (simulate GPS)"
+                onPress={pingLocation}
+                loading={pinging}
+                disabled={!origin || !dest || progress >= 1}
+              />
+            </View>
           )}
           <View style={{ alignItems: "center", gap: 8 }}>
             <T ar="أدخل رمز التسليم من العميل لإنهاء المهمة" en="Enter the client's delivery code to close the job" style={{ fontSize: 12.5, color: c.textMuted58, textAlign: "center" }} />

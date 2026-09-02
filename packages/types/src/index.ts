@@ -75,6 +75,8 @@ export interface ShipmentDetails {
   taxExempt: boolean;
   exemptionCertUrl?: string;
   deliveryLocation?: string;
+  deliveryLat?: number;
+  deliveryLng?: number;
   truckType?: string;
 }
 

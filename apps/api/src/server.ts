@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import websocket from "@fastify/websocket";
 import prismaPlugin from "./plugins/prisma.js";
 import redisPlugin from "./plugins/redis.js";
 import authPlugin from "./plugins/auth.js";
@@ -14,6 +15,7 @@ import walletRoutes from "./routes/wallet.js";
 import adminRoutes from "./routes/admin.js";
 import disputeRoutes from "./routes/disputes.js";
 import providerRoutes from "./routes/providers.js";
+import realtimeRoutes from "./routes/realtime.js";
 
 export async function buildServer() {
   const app = Fastify({
@@ -23,6 +25,7 @@ export async function buildServer() {
   });
 
   await app.register(cors, { origin: true });
+  await app.register(websocket);
   await app.register(prismaPlugin);
   await app.register(redisPlugin);
   await app.register(authPlugin);
@@ -40,6 +43,7 @@ export async function buildServer() {
   await app.register(adminRoutes);
   await app.register(disputeRoutes);
   await app.register(providerRoutes);
+  await app.register(realtimeRoutes);
 
   return app;
 }
