@@ -1,0 +1,16 @@
+# Local dev services for apps/api. Not used in production — see docs/ARCHITECTURE.md.
+version: "3.8"
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: tanafus
+      POSTGRES_PASSWORD: tanafus
+      POSTGRES_DB: tanafus
+    ports: ["5432:5432"]
+    volumes: ["tanafus_pg:/var/lib/postgresql/data"]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+volumes:
+  tanafus_pg:
