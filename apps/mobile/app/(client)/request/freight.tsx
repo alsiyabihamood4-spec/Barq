@@ -9,7 +9,7 @@ import { Lbl } from "../../../src/ui/Text";
 import { Blueprint } from "../../../src/ui/Blueprint";
 import { c } from "../../../src/ui/tokens";
 import { useTenderDraft } from "../../../src/state/tenderDraft";
-import { trucks, deliveryHubs } from "@tanafus/i18n";
+import { trucks, deliveryHubs } from "@BARQ/i18n";
 
 /** 1a (part 3, freight only) — delivery location + truck type. The map
  * canvas is still a drawn placeholder (per the design bundle's own note),

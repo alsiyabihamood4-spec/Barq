@@ -1,6 +1,6 @@
 // Maps Prisma's UPPER_SNAKE enums onto the lowercase literal unions the
-// frontends share via @tanafus/types. Every route the mobile app calls
-// through a `@tanafus/types` import (orders, bids-accept) MUST send its
+// frontends share via @BARQ/types. Every route the mobile app calls
+// through a `@BARQ/types` import (orders, bids-accept) MUST send its
 // response through one of these — a raw Prisma object's enum casing
 // ("DELIVERED") will silently fail every `=== "delivered"` comparison on
 // the client. Routes apps/admin reads directly (routes/admin.ts, kyc.ts,
@@ -15,7 +15,7 @@ import type {
   ServiceType as PrismaServiceType,
   OrderStage as PrismaOrderStage,
 } from "@prisma/client";
-import type { User, Role, ProviderType, Order, ServiceType, OrderStage } from "@tanafus/types";
+import type { User, Role, ProviderType, Order, ServiceType, OrderStage } from "@BARQ/types";
 
 const roleMap: Record<PrismaRole, Role> = {
   CLIENT: "client",

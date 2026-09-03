@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { adminSections } from "@tanafus/i18n";
+import { adminSections } from "@BARQ/i18n";
 import { AdminShell } from "../../../components/AdminShell";
 import { apiFetch } from "../../../lib/api";
 import { ApiUnavailable } from "../../../components/ApiUnavailable";
@@ -25,7 +25,7 @@ const STAGE_LABEL: Record<string, { ar: string; en: string; done: number }> = {
 };
 
 export default async function OperationsPage() {
-  const token = cookies().get("tanafus_admin_token")?.value;
+  const token = cookies().get("BARQ_admin_token")?.value;
   let orders: OrderRow[] = [];
   let error: string | null = null;
   try {

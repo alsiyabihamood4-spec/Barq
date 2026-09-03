@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Tanafus",
-    "slug": "tanafus",
-    "scheme": "tanafus",
+    "name": "BARQ",
+    "slug": "BARQ",
+    "scheme": "BARQ",
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -12,11 +12,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "om.tanafus.app",
+      "bundleIdentifier": "om.BARQ.app",
       "supportsTablet": false
     },
     "android": {
-      "package": "om.tanafus.app"
+      "package": "om.BARQ.app"
     },
     "plugins": ["expo-router"],
     "extra": {

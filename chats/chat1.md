@@ -114,7 +114,7 @@ Tweaks panel: default language, platform commission (recomputes all net figures)
 
 <system-info comment="Only acknowledge these if relevant">
 Project title is now "Logistics clearance and freight app design"
-User is viewing file: Tanafus App.dc.html
+User is viewing file: BARQ App.dc.html
 </system-info>
 
 <pasted_text name="Pasted text (101 lines)">

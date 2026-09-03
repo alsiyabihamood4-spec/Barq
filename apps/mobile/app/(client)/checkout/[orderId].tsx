@@ -10,7 +10,7 @@ import { Blueprint } from "../../../src/ui/Blueprint";
 import { c, font } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useApi } from "../../../src/lib/useApi";
-import type { Order } from "@tanafus/types";
+import type { Order } from "@BARQ/types";
 
 const PAY_METHODS = [
   { key: "card", ar: "بطاقة بنكية", en: "Bank card", meta: "**** 4417 · BANK MUSCAT" },

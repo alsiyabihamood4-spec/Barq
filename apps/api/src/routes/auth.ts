@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { issueOtp, verifyOtp } from "../lib/otp.js";
 import { toUserDto } from "../lib/dto.js";
-import type { AuthSession } from "@tanafus/types";
+import type { AuthSession } from "@BARQ/types";
 
 const requestOtpSchema = z.object({ mobile: z.string().min(6) });
 const verifyOtpSchema = z.object({

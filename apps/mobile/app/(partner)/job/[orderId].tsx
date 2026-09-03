@@ -13,8 +13,8 @@ import { useDir } from "../../../src/state/locale";
 import { useSession } from "../../../src/state/session";
 import { useApi } from "../../../src/lib/useApi";
 import { apiFetch } from "../../../src/lib/api";
-import { clearanceSteps } from "@tanafus/i18n";
-import type { Order, Port } from "@tanafus/types";
+import { clearanceSteps } from "@BARQ/i18n";
+import type { Order, Port } from "@BARQ/types";
 
 interface TenderCoords {
   portCode: string;

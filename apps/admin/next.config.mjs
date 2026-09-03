@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@tanafus/theme", "@tanafus/i18n", "@tanafus/types"],
+  transpilePackages: ["@BARQ/theme", "@BARQ/i18n", "@BARQ/types"],
   reactStrictMode: true,
 };
 

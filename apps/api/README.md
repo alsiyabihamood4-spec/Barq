@@ -1,6 +1,6 @@
-# @tanafus/api
+# @BARQ/api
 
-Fastify + Prisma backend for Tanafus.
+Fastify + Prisma backend for BARQ.
 
 ## Local dev
 
@@ -9,9 +9,9 @@ Fastify + Prisma backend for Tanafus.
 docker compose up -d          # Postgres+PostGIS, Redis
 cp apps/api/.env.example apps/api/.env
 pnpm install
-pnpm --filter @tanafus/api prisma:generate
-pnpm --filter @tanafus/api prisma:migrate
-pnpm --filter @tanafus/api seed
+pnpm --filter @BARQ/api prisma:generate
+pnpm --filter @BARQ/api prisma:migrate
+pnpm --filter @BARQ/api seed
 pnpm dev:api                   # http://localhost:4000
 ```
 

@@ -27,6 +27,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "not_admin", message: "This mobile number is not registered as ops staff." }, { status: 403 });
   }
   const response = NextResponse.json({ ok: true });
-  response.cookies.set("tanafus_admin_token", token, { httpOnly: true, sameSite: "lax", path: "/" });
+  response.cookies.set("BARQ_admin_token", token, { httpOnly: true, sameSite: "lax", path: "/" });
   return response;
 }

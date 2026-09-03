@@ -1,4 +1,4 @@
-import { rnColor, rnFont, rnSpace, rnRadius } from "@tanafus/theme";
+import { rnColor, rnFont, rnSpace, rnRadius } from "@BARQ/theme";
 
 /** Re-exported under short names so screen files stay readable. */
 export const c = rnColor;

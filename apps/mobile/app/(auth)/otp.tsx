@@ -6,7 +6,7 @@ import { T } from "../../src/ui/T";
 import { OtpKeypad } from "../../src/ui/OtpKeypad";
 import { c } from "../../src/ui/tokens";
 import { useSession } from "../../src/state/session";
-import type { Role } from "@tanafus/types";
+import type { Role } from "@BARQ/types";
 
 /** 3b — OTP verification, reused for both sign-up and 6b's sign-in hop-off.
  * Demo code is 482715, exactly like the prototype. */

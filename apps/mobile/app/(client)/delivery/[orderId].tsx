@@ -10,8 +10,8 @@ import { Blueprint } from "../../../src/ui/Blueprint";
 import { c, font } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useApi } from "../../../src/lib/useApi";
-import { deliveryChecks } from "@tanafus/i18n";
-import type { Order } from "@tanafus/types";
+import { deliveryChecks } from "@BARQ/i18n";
+import type { Order } from "@BARQ/types";
 
 /** 1e — delivery confirmation: shows the OTP for the client to read out to
  * the driver (the driver enters it on their side, see the partner app's

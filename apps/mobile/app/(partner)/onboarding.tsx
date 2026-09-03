@@ -10,8 +10,8 @@ import { c, font } from "../../src/ui/tokens";
 import { useDir } from "../../src/state/locale";
 import { useSession } from "../../src/state/session";
 import { apiFetch } from "../../src/lib/api";
-import { providerTypes, ports } from "@tanafus/i18n";
-import type { KycApplication, ProviderType } from "@tanafus/types";
+import { providerTypes, ports } from "@BARQ/i18n";
+import type { KycApplication, ProviderType } from "@BARQ/types";
 
 /** 2a — provider onboarding & KYC: pick a provider type (brokers must also
  * choose their licensed ports — geo-fences the tender feed later), then

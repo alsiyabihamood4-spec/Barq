@@ -1,14 +1,14 @@
 import type { Bi } from "./types";
 
 /**
- * Bilingual copy, pulled from `project/Tanafus App.dc.html`'s markup and its
+ * Bilingual copy, pulled from `project/BARQ App.dc.html`'s markup and its
  * embedded `Component` state model (PORTS, BIDS, STEPS, TENDERS, KYC, OPS,
  * TICKETS, …). Keep the Arabic and English lines paired exactly as the
  * prototype has them — nothing here is invented.
  */
 
 export const brand = {
-  name: "TANAFUS · تنافُس",
+  name: "BARQ · برق",
   tagline: { ar: "مناقصات التخليص والنقل في مكان واحد", en: "Clearance and freight tenders in one place" } satisfies Bi,
   pitch: {
     ar: "اطرح شحنتك، قارن العروض من مخلّصين وناقلين مرخّصين في منافذ السلطنة، وادفع عبر ضمان لا يُفرج عنه إلا بعد التسليم.",

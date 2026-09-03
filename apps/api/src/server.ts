@@ -30,7 +30,7 @@ export async function buildServer() {
   await app.register(redisPlugin);
   await app.register(authPlugin);
 
-  app.get("/health", async () => ({ ok: true, service: "tanafus-api" }));
+  app.get("/health", async () => ({ ok: true, service: "BARQ-api" }));
 
   await app.register(authRoutes);
   await app.register(companyRoutes);

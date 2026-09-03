@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { adminSections } from "@tanafus/i18n";
+import { adminSections } from "@BARQ/i18n";
 import { AdminShell } from "../../../components/AdminShell";
 import { Blueprint } from "../../../components/Blueprint";
 import { apiFetch } from "../../../lib/api";
@@ -22,7 +22,7 @@ interface DisputeRow {
 }
 
 export default async function DisputesPage() {
-  const token = cookies().get("tanafus_admin_token")?.value;
+  const token = cookies().get("BARQ_admin_token")?.value;
   let disputes: DisputeRow[] = [];
   let error: string | null = null;
   try {

@@ -9,7 +9,7 @@ import { c, font } from "../../src/ui/tokens";
 import { useDir } from "../../src/state/locale";
 import { useSession } from "../../src/state/session";
 import { useApi } from "../../src/lib/useApi";
-import type { Order } from "@tanafus/types";
+import type { Order } from "@BARQ/types";
 
 const STAGE_LABEL: Record<string, { ar: string; en: string; done: number }> = {
   assigned: { ar: "تم التعيين", en: "Assigned", done: 1 },
@@ -31,7 +31,7 @@ export default function Home() {
       <ScrollView contentContainerStyle={{ padding: 18, gap: 18, paddingBottom: 40 }}>
         <View style={{ flexDirection: row, alignItems: "center", justifyContent: "space-between" }}>
           <View>
-            <Mono style={{ fontSize: 10, color: c.textMuted48 }}>TANAFUS · تنافُس</Mono>
+            <Mono style={{ fontSize: 10, color: c.textMuted48 }}>BARQ · برق</Mono>
             <T
               ar={`مرحباً، ${user?.nameAr ?? ""}`}
               en={`Welcome, ${user?.nameEn ?? ""}`}

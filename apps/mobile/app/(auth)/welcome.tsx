@@ -8,8 +8,8 @@ import { Btn } from "../../src/ui/Btn";
 import { PickCard } from "../../src/ui/PickCard";
 import { Blueprint } from "../../src/ui/Blueprint";
 import { c, font } from "../../src/ui/tokens";
-import { roles, brand } from "@tanafus/i18n";
-import type { Role } from "@tanafus/types";
+import { roles, brand } from "@BARQ/i18n";
+import type { Role } from "@BARQ/types";
 
 /** 6a — welcome & role choice. Picking a role decides where sign-in/sign-up
  * routes to (client's company registration vs. partner's provider KYC). */

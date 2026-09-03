@@ -7,7 +7,7 @@ import { Blueprint } from "../../../src/ui/Blueprint";
 import { c, font } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useApi } from "../../../src/lib/useApi";
-import { ratingTraits } from "@tanafus/i18n";
+import { ratingTraits } from "@BARQ/i18n";
 
 interface ProviderProfile {
   nameAr: string;

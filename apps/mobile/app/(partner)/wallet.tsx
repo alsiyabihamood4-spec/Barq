@@ -8,7 +8,7 @@ import { Mono } from "../../src/ui/Text";
 import { c, font } from "../../src/ui/tokens";
 import { useDir } from "../../src/state/locale";
 import { useApi } from "../../src/lib/useApi";
-import type { WalletTransaction } from "@tanafus/types";
+import type { WalletTransaction } from "@BARQ/types";
 
 interface WalletResponse {
   pending: WalletTransaction[];

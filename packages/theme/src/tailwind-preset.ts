@@ -6,7 +6,7 @@ import type { Config } from "tailwindcss";
  * theme so admin markup can use `bg-accent`, `text-accent-700`,
  * `font-heading`, `rounded-blueprint` (0) etc. instead of ad-hoc values.
  */
-const tanafusPreset: Partial<Config> = {
+const BARQPreset: Partial<Config> = {
   theme: {
     extend: {
       colors: {
@@ -55,4 +55,4 @@ const tanafusPreset: Partial<Config> = {
   },
 };
 
-export default tanafusPreset;
+export default BARQPreset;

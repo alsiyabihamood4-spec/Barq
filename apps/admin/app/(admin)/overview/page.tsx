@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { adminSections, ports } from "@tanafus/i18n";
+import { adminSections, ports } from "@BARQ/i18n";
 import { AdminShell } from "../../../components/AdminShell";
 import { Blueprint } from "../../../components/Blueprint";
 import { StatRow } from "../../../components/StatCard";
@@ -18,7 +18,7 @@ interface OverviewData {
 }
 
 export default async function OverviewPage() {
-  const token = cookies().get("tanafus_admin_token")?.value;
+  const token = cookies().get("BARQ_admin_token")?.value;
   let data: OverviewData | null = null;
   let error: string | null = null;
   try {

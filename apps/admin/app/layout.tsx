@@ -3,7 +3,7 @@ import { LocaleProvider } from "../components/LocaleProvider";
 import "./globals.css";
 
 export const metadata = {
-  title: "Tanafus Admin · تنافُس",
+  title: "BARQ Admin · برق",
   description: "Sultanate of Oman — customs clearance & freight tender operations console.",
 };
 

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Bi } from "@tanafus/i18n";
+import type { Bi } from "@BARQ/i18n";
 
 export function AdminShell({ title, crumb, children }: { title: Bi; crumb: string; children: ReactNode }) {
   const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });

@@ -14,13 +14,13 @@ importers:
 
   apps/admin:
     dependencies:
-      '@tanafus/i18n':
+      '@BARQ/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@tanafus/theme':
+      '@BARQ/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@tanafus/types':
+      '@BARQ/types':
         specifier: workspace:*
         version: link:../../packages/types
       next:
@@ -69,10 +69,10 @@ importers:
       '@prisma/client':
         specifier: ^5.19.1
         version: 5.22.0(prisma@5.22.0)
-      '@tanafus/i18n':
+      '@BARQ/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@tanafus/types':
+      '@BARQ/types':
         specifier: workspace:*
         version: link:../../packages/types
       dotenv:
@@ -115,13 +115,13 @@ importers:
       '@react-native-async-storage/async-storage':
         specifier: 1.23.1
         version: 1.23.1(react-native@0.74.5(@babel/core@7.29.7)(@babel/preset-env@7.29.7(@babel/core@7.29.7))(@types/react@18.2.79)(react@18.2.0))
-      '@tanafus/i18n':
+      '@BARQ/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@tanafus/theme':
+      '@BARQ/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@tanafus/types':
+      '@BARQ/types':
         specifier: workspace:*
         version: link:../../packages/types
       expo:

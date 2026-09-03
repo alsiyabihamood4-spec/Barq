@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import * as SecureStore from "expo-secure-store";
-import type { AuthSession, User } from "@tanafus/types";
+import type { AuthSession, User } from "@BARQ/types";
 import { apiFetch } from "../lib/api";
 
 interface SessionState {
@@ -18,8 +18,8 @@ interface SessionState {
   signOut: () => Promise<void>;
 }
 
-const TOKEN_KEY = "tanafus_token";
-const USER_KEY = "tanafus_user";
+const TOKEN_KEY = "BARQ_token";
+const USER_KEY = "BARQ_user";
 
 export const useSession = create<SessionState>((set) => ({
   token: null,

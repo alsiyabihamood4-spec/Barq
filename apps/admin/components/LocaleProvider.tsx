@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { dirOf, type Locale } from "@tanafus/i18n";
+import { dirOf, type Locale } from "@BARQ/i18n";
 
 const LocaleContext = createContext<{ locale: Locale; setLocale: (l: Locale) => void }>({
   locale: "ar",
@@ -16,7 +16,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>("ar");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("tanafus-locale") as Locale | null;
+    const stored = window.localStorage.getItem("BARQ-locale") as Locale | null;
     if (stored === "ar" || stored === "en") setLocale(stored);
   }, []);
 
@@ -24,7 +24,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = dirOf(locale);
     document.documentElement.lang = locale;
     document.documentElement.dataset.lang = locale;
-    window.localStorage.setItem("tanafus-locale", locale);
+    window.localStorage.setItem("BARQ-locale", locale);
   }, [locale]);
 
   return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;

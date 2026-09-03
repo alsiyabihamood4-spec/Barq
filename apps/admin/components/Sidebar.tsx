@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { adminNavItems } from "@tanafus/i18n";
+import { adminNavItems } from "@BARQ/i18n";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { SignOutButton } from "./SignOutButton";
 
@@ -22,7 +22,7 @@ export function Sidebar({ user }: { user: { nameAr: string; nameEn: string; mobi
   return (
     <div className="w-[212px] shrink-0 border-e border-divider bg-neutral-100 flex flex-col">
       <div className="px-4 py-4 border-b border-divider">
-        <span className="mono text-[10px] bg-accent text-bg px-1.5 py-0.5 tracking-widest">TANAFUS ADMIN</span>
+        <span className="mono text-[10px] bg-accent text-bg px-1.5 py-0.5 tracking-widest">BARQ ADMIN</span>
         <div className="mono text-[9.5px] text-ink/50 mt-2">SULTANATE OF OMAN · OPS</div>
         <div className="mt-3">
           <LanguageSwitch />

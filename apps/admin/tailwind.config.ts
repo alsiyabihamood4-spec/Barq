@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
-import tanafusPreset from "@tanafus/theme/src/tailwind-preset";
+import BARQPreset from "@BARQ/theme/src/tailwind-preset";
 
 const config: Config = {
-  presets: [tanafusPreset as Config],
+  presets: [BARQPreset as Config],
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: { extend: {} },
   plugins: [],

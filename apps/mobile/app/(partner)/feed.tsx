@@ -11,7 +11,7 @@ import { useSession } from "../../src/state/session";
 import { useApi } from "../../src/lib/useApi";
 import { WS_URL } from "../../src/lib/api";
 import { Lbl } from "../../src/ui/Text";
-import type { Tender, Order } from "@tanafus/types";
+import type { Tender, Order } from "@BARQ/types";
 
 function hms(seconds: number) {
   const h = Math.floor(seconds / 3600);
@@ -65,7 +65,7 @@ export default function Feed() {
       <ScrollView contentContainerStyle={{ padding: 18, gap: 16, paddingBottom: 40 }}>
         <View style={{ flexDirection: row, alignItems: "center", justifyContent: "space-between" }}>
           <View>
-            <Mono style={{ fontSize: 10, color: c.textMuted48 }}>TANAFUS · تنافُس</Mono>
+            <Mono style={{ fontSize: 10, color: c.textMuted48 }}>BARQ · برق</Mono>
             <T ar="ساحة المناقصات" en="Tender feed" style={{ fontFamily: font.heading, fontWeight: "600", fontSize: 24, marginTop: 4 }} />
           </View>
           <View style={{ flexDirection: row, gap: 8 }}>

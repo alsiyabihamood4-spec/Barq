@@ -1,4 +1,4 @@
-// Tanafus — primary database schema.
+// BARQ — primary database schema.
 // PostgreSQL + PostGIS (per the architecture diagram): port and live-vehicle
 // positions are geography points so tender matching can geo-fence by port
 // and jobs can be tracked on a real map once Mapbox/Google Maps replaces the

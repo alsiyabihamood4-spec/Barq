@@ -1,13 +1,13 @@
 {
-  "name": "tanafus",
+  "name": "BARQ",
   "private": true,
   "version": "0.1.0",
-  "description": "Tanafus · تنافُس — Customs clearance & freight tender marketplace for Oman",
+  "description": "BARQ · برق — Customs clearance & freight tender marketplace for Oman",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev:api": "pnpm --filter @tanafus/api dev",
-    "dev:admin": "pnpm --filter @tanafus/admin dev",
-    "dev:mobile": "pnpm --filter @tanafus/mobile start",
+    "dev:api": "pnpm --filter @BARQ/api dev",
+    "dev:admin": "pnpm --filter @BARQ/admin dev",
+    "dev:mobile": "pnpm --filter @BARQ/mobile start",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint"

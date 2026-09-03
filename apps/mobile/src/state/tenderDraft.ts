@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ServiceType } from "@tanafus/types";
+import type { ServiceType } from "@BARQ/types";
 
 /** Accumulates the request-creation flow's four screens (service+port →
  * shipment → freight details → duration/publish) before the single

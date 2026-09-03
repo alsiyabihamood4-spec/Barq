@@ -12,8 +12,8 @@ import { useDir } from "../../../src/state/locale";
 import { useSession } from "../../../src/state/session";
 import { useApi } from "../../../src/lib/useApi";
 import { apiFetch } from "../../../src/lib/api";
-import { clearanceSteps, freightSteps } from "@tanafus/i18n";
-import type { Order } from "@tanafus/types";
+import { clearanceSteps, freightSteps } from "@BARQ/i18n";
+import type { Order } from "@BARQ/types";
 
 interface LocationResponse {
   tracking: boolean;

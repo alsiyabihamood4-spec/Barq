@@ -4,13 +4,13 @@ services:
   postgres:
     image: postgis/postgis:16-3.4
     environment:
-      POSTGRES_USER: tanafus
-      POSTGRES_PASSWORD: tanafus
-      POSTGRES_DB: tanafus
+      POSTGRES_USER: BARQ
+      POSTGRES_PASSWORD: BARQ
+      POSTGRES_DB: BARQ
     ports: ["5432:5432"]
-    volumes: ["tanafus_pg:/var/lib/postgresql/data"]
+    volumes: ["BARQ_pg:/var/lib/postgresql/data"]
   redis:
     image: redis:7-alpine
     ports: ["6379:6379"]
 volumes:
-  tanafus_pg:
+  BARQ_pg:

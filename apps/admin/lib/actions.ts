@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { apiFetch } from "./api";
 
 function token() {
-  return cookies().get("tanafus_admin_token")?.value;
+  return cookies().get("BARQ_admin_token")?.value;
 }
 
 export async function decideKyc(id: string, approve: boolean, reviewerNote?: string) {

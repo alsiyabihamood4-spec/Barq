@@ -13,8 +13,8 @@ import { useDir } from "../../../src/state/locale";
 import { useTenderDraft } from "../../../src/state/tenderDraft";
 import { useSession } from "../../../src/state/session";
 import { apiFetch } from "../../../src/lib/api";
-import { services, ports, deliveryHubs } from "@tanafus/i18n";
-import type { Tender } from "@tanafus/types";
+import { services, ports, deliveryHubs } from "@BARQ/i18n";
+import type { Tender } from "@BARQ/types";
 
 const DURATIONS = [
   { label: "30M", minutes: 30 },

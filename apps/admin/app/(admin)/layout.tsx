@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   // session — no more auto-login. Per-page fetches still handle a token
   // that's present but expired/revoked (apiFetch throws, pages render
   // ApiUnavailable), this only catches the "never signed in" case.
-  const token = cookies().get("tanafus_admin_token")?.value;
+  const token = cookies().get("BARQ_admin_token")?.value;
   if (!token) redirect("/sign-in");
 
   const user = await apiFetch<{ nameAr: string; nameEn: string; mobile: string }>("/auth/me", token).catch(() => null);

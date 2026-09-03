@@ -12,7 +12,7 @@ import { useDir } from "../../../src/state/locale";
 import { useSession } from "../../../src/state/session";
 import { useApi } from "../../../src/lib/useApi";
 import { apiFetch } from "../../../src/lib/api";
-import type { Order } from "@tanafus/types";
+import type { Order } from "@BARQ/types";
 
 type Sort = "price" | "rating" | "speed";
 

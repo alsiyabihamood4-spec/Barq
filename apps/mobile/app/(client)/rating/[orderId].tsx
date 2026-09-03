@@ -10,7 +10,7 @@ import { c, font } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useSession } from "../../../src/state/session";
 import { apiFetch } from "../../../src/lib/api";
-import { ratingTraits } from "@tanafus/i18n";
+import { ratingTraits } from "@BARQ/i18n";
 
 const WORDS_AR = ["اختر تقييماً", "سيئ", "مقبول", "جيد", "جيد جداً", "ممتاز"];
 const WORDS_EN = ["PICK A RATING", "POOR", "FAIR", "GOOD", "VERY GOOD", "EXCELLENT"];

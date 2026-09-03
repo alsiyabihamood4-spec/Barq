@@ -1,6 +1,6 @@
-# Tanafus — architecture
+# BARQ — architecture
 
-Implements the design bundle in `project/Tanafus App.dc.html` (Claude Design export)
+Implements the design bundle in `project/BARQ App.dc.html` (Claude Design export)
 as a real, buildable monorepo. See `docs/IMPLEMENTATION_STATUS.md` for what is fully
 built vs. scaffolded.
 

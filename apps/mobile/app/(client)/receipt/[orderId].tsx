@@ -9,7 +9,7 @@ import { Blueprint } from "../../../src/ui/Blueprint";
 import { c, font } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useApi } from "../../../src/lib/useApi";
-import type { Order } from "@tanafus/types";
+import type { Order } from "@BARQ/types";
 
 /** 3f — escrow success receipt: confirms the amount is frozen and hands the
  * client off to live tracking. */

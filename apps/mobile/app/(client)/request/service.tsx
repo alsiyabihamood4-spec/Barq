@@ -9,7 +9,7 @@ import { PickCard } from "../../../src/ui/PickCard";
 import { c } from "../../../src/ui/tokens";
 import { useDir } from "../../../src/state/locale";
 import { useTenderDraft } from "../../../src/state/tenderDraft";
-import { services, ports } from "@tanafus/i18n";
+import { services, ports } from "@BARQ/i18n";
 
 /** 1a — service type + customs port. Tapping the port field cycles through
  * the four Oman ports, matching the prototype's `cyclePort`. */

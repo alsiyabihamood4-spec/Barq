@@ -58,7 +58,7 @@ export default function SignInPage() {
     <div className="h-screen flex items-center justify-center bg-bg text-ink px-4">
       <Blueprint className="w-full max-w-sm p-6 flex flex-col gap-4">
         <div>
-          <span className="mono text-[10px] bg-accent text-bg px-1.5 py-0.5 tracking-widest">TANAFUS ADMIN</span>
+          <span className="mono text-[10px] bg-accent text-bg px-1.5 py-0.5 tracking-widest">BARQ ADMIN</span>
           <h1 className="text-[22px] font-semibold tracking-wide mt-3">Sign in</h1>
           <p className="text-[12.5px] text-ink/58 mt-1">Ops staff only — sign in with your registered mobile number.</p>
         </div>

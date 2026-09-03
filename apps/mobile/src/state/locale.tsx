@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import type { Locale } from "@tanafus/i18n";
-import { dirOf } from "@tanafus/i18n";
+import type { Locale } from "@BARQ/i18n";
+import { dirOf } from "@BARQ/i18n";
 
 interface LocaleState {
   locale: Locale;
@@ -20,11 +20,11 @@ export const useLocaleStore = create<LocaleState>((set) => ({
   locale: "ar",
   setLocale: (l) => {
     set({ locale: l });
-    AsyncStorage.setItem("tanafus-locale", l).catch(() => {});
+    AsyncStorage.setItem("BARQ-locale", l).catch(() => {});
   },
   hydrate: async () => {
     try {
-      const stored = await AsyncStorage.getItem("tanafus-locale");
+      const stored = await AsyncStorage.getItem("BARQ-locale");
       if (stored === "ar" || stored === "en") set({ locale: stored });
     } catch {
       /* first run / storage unavailable — default stands */

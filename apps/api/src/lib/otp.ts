@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { DEMO_OTP } from "@tanafus/i18n";
+import { DEMO_OTP } from "@BARQ/i18n";
 
 const memoryStore = new Map<string, { code: string; expiresAt: number }>();
 const TTL_SECONDS = 5 * 60;

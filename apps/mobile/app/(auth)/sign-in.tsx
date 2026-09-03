@@ -8,7 +8,7 @@ import { Btn } from "../../src/ui/Btn";
 import { BottomBar } from "../../src/ui/BottomBar";
 import { Blueprint } from "../../src/ui/Blueprint";
 import { c, font } from "../../src/ui/tokens";
-import { altSignins } from "@tanafus/i18n";
+import { altSignins } from "@BARQ/i18n";
 import { useSession } from "../../src/state/session";
 import { useDir } from "../../src/state/locale";
 
@@ -68,7 +68,7 @@ export default function SignIn() {
             <T ar="كلمة المرور" en="Password" />
           </Lbl>
           <View style={{ flexDirection: row, alignItems: "center", gap: 10, borderWidth: 1, borderColor: c.divider, padding: 12 }}>
-            <Mono style={{ flex: 1, fontSize: 16, letterSpacing: pwShown ? 0 : 4 }}>{pwShown ? "Tanafus·2026" : "••••••••••"}</Mono>
+            <Mono style={{ flex: 1, fontSize: 16, letterSpacing: pwShown ? 0 : 4 }}>{pwShown ? "BARQ·2026" : "••••••••••"}</Mono>
             <Mono onPress={() => setPwShown((s) => !s)} style={{ fontSize: 10, color: c.accent700 }}>
               <T ar={pwShown ? "إخفاء" : "إظهار"} en={pwShown ? "HIDE" : "SHOW"} />
             </Mono>
